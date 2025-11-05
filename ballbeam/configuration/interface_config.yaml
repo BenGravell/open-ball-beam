@@ -1,0 +1,8 @@
+controller_type: MSPC
+cost_type: Default
+logger_type: Full
+monitor_types:
+- Print
+- Plot
+reference_type: Constant
+system_type: Hardware
