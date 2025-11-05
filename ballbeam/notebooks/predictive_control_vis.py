@@ -186,7 +186,7 @@ class RerunPredictiveControlVisualizer(PredictiveControlVisualizer):
                     start=rrb.TimeRangeBoundary.cursor_relative(seconds=-5.0),
                     end=rrb.TimeRangeBoundary.cursor_relative(),
                 ),
-                axis_y=rrb.ScalarAxis(range=self.obs_display_lim, lock_range_during_zoom=True),
+                axis_y=rrb.ScalarAxis(range=self.obs_display_lim, zoom_lock=True),
             ),
             rrb.TimeSeriesView(
                 name="Actions",
@@ -196,7 +196,7 @@ class RerunPredictiveControlVisualizer(PredictiveControlVisualizer):
                     start=rrb.TimeRangeBoundary.cursor_relative(seconds=-5.0),
                     end=rrb.TimeRangeBoundary.cursor_relative(),
                 ),
-                axis_y=rrb.ScalarAxis(range=self.act_display_lim, lock_range_during_zoom=True),
+                axis_y=rrb.ScalarAxis(range=self.act_display_lim, zoom_lock=True),
             ),
         )
 
@@ -210,15 +210,15 @@ class RerunPredictiveControlVisualizer(PredictiveControlVisualizer):
         # Log statics
         futr_idx = self.predictor.horizons.futr - 1
         rr.set_time_seconds("time", self.dt * (offset + futr_idx))
-        rr.log(f"output/futr", rr.Scalar(ydata_dict["y_futr"][futr_idx]))
-        rr.log(f"output/futr_ref", rr.Scalar(ydata_dict["y_futr_ref"][futr_idx]))
+        rr.log(f"output/futr", rr.Scalars(ydata_dict["y_futr"][futr_idx]))
+        rr.log(f"output/futr_ref", rr.Scalars(ydata_dict["y_futr_ref"][futr_idx]))
 
         # Log dynamics
         offset_str = f"offset_{offset:04d}"
         for futr_idx in range(self.predictor.horizons.futr):
             rr.set_time_seconds("time", self.dt * (offset + futr_idx))
-            rr.log(f"output/futr_pred/{offset_str}", rr.Scalar(ydata_dict["y_futr_new_pred"][futr_idx]))
-            rr.log(f"action/futr/{offset_str}", rr.Scalar(ydata_dict["u_futr_new"][futr_idx]))
+            rr.log(f"output/futr_pred/{offset_str}", rr.Scalars(ydata_dict["y_futr_new_pred"][futr_idx]))
+            rr.log(f"action/futr/{offset_str}", rr.Scalars(ydata_dict["u_futr_new"][futr_idx]))
 
     def visualize(self, example, frame_range):
         self.example = example
@@ -227,12 +227,12 @@ class RerunPredictiveControlVisualizer(PredictiveControlVisualizer):
         # Set static plot styles
         rr.log(
             f"output/futr_ref",
-            rr.SeriesLine(color=[*Monokai.g, 255], width=2, name="Reference Output"),
+            rr.SeriesLines(colors=[*Monokai.g, 255], widths=2, names="Reference Output"),
             static=True,
         )
         rr.log(
             f"output/futr",
-            rr.SeriesLine(color=[*Monokai.b, 255], width=2, name="Actual Output"),
+            rr.SeriesLines(colors=[*Monokai.b, 255], widths=2, names="Actual Output"),
             static=True,
         )
 
@@ -240,12 +240,12 @@ class RerunPredictiveControlVisualizer(PredictiveControlVisualizer):
             offset_str = f"offset_{offset:04d}"
             rr.log(
                 f"output/futr_pred/{offset_str}",
-                rr.SeriesLine(color=[*Monokai.r, 64], width=0.5, name="Predicted Output"),
+                rr.SeriesLines(colors=[*Monokai.r, 64], widths=0.5, names="Predicted Output"),
                 static=True,
             )
             rr.log(
                 f"action/futr/{offset_str}",
-                rr.SeriesLine(color=[*Monokai.v, 64], width=0.5, name="Planned Action"),
+                rr.SeriesLines(colors=[*Monokai.v, 64], widths=0.5, names="Planned Action"),
                 static=True,
             )
 
@@ -257,8 +257,8 @@ class RerunPredictiveControlVisualizer(PredictiveControlVisualizer):
         y_futr = example.y[offset + past : offset + past + futr]
         for futr_idx in range(futr - 1):
             rr.set_time_seconds("time", self.dt * (offset + futr_idx))
-            rr.log(f"output/futr", rr.Scalar(y_futr[futr_idx]))
-            rr.log(f"output/futr_ref", rr.Scalar(y_futr_ref[futr_idx]))
+            rr.log(f"output/futr", rr.Scalars(y_futr[futr_idx]))
+            rr.log(f"output/futr_ref", rr.Scalars(y_futr_ref[futr_idx]))
 
         # Compute and log dynamic data
         for offset in frame_range:
@@ -266,7 +266,8 @@ class RerunPredictiveControlVisualizer(PredictiveControlVisualizer):
 
 
 def visualize(controller, dt, example, frame_range, engine):
-    if engine == "matplotlib":
+    if engine == "mpl":
         return MplPredictiveControlVisualizer(controller, dt).visualize(example, frame_range)
     if engine == "rerun":
         return RerunPredictiveControlVisualizer(controller, dt).visualize(example, frame_range)
+    raise ValueError
