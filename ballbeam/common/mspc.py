@@ -95,9 +95,15 @@ class MultiStepPredictor:
         U: ArrF64,
         Y: ArrF64,
         regularization_parameters: RegularizationParameters | None = None,
+        stride: int = 1,
     ) -> None:
 
         U_past_r, Y_past_r, U_futr_r, Y_futr_r = roll(U, Y, self.horizons)
+
+        U_past_r = U_past_r[0:-1:stride]
+        Y_past_r = Y_past_r[0:-1:stride]
+        U_futr_r = U_futr_r[0:-1:stride]
+        Y_futr_r = Y_futr_r[0:-1:stride]
 
         # Train linear prediction model
         # Train one model per future timestep, enforcing a causal structure.
