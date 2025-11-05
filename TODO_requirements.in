@@ -1,34 +1,13 @@
-numpy
-scipy
-pandas
-pillow>=10.3.0
-matplotlib
-plotly
-pyqtgraph
-PyQt5
-pyserial
-keyboard
-ruamel.yaml<0.18.0
-osqp
-# cmake is required for osqp codegen
-cmake  
 gym==0.21.0
+
 # pyglet is required for gym env rendering
 # Need to pin pyglet to latest version that works with gym 0.21.0
 # See https://stackoverflow.com/a/74324578
 pyglet==1.5.27
+
 # Need to pin setuptools and wheel for successful gym setup
 # See https://github.com/freqtrade/freqtrade/issues/8376#issuecomment-1519257211
 # See https://stackoverflow.com/a/76286033
 setuptools==65.5.0
+
 wheel==0.38.4
-pygit2
-ipykernel>=6.29.5
-# Need tornado>=6.4.2 to avoid https://nvd.nist.gov/vuln/detail/CVE-2024-52804
-tornado>=6.4.2
-nbformat
-pre-commit
-black>=24.3.0
-ruff
-mypy
-pip-tools
