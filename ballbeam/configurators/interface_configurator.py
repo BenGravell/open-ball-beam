@@ -9,16 +9,16 @@ def make_interface_configurator() -> Configurator:
     name = "interface"
     description = "Interface settings"
 
-    # system_type = "Hardware"
-    system_type = "Simulator"
+    system_type = "Hardware"
+    # system_type = "Simulator"
 
     # controller_type = "Random"
     # controller_type = "PID"
-    # controller_type = "LQG"
-    controller_type = "MSPC"
+    controller_type = "LQG"
+    # controller_type = "MSPC"
 
-    # reference_type = "Constant"
-    reference_type = "FastSquare"
+    reference_type = "Constant"
+    # reference_type = "FastSquare"
     # reference_type = "SlowSine"
     # reference_type = "RandomWaves"
 
@@ -27,6 +27,7 @@ def make_interface_configurator() -> Configurator:
     monitor_types = ["Print", "Plot"]
     # monitor_types = ["Print"]
 
+    # logger_type = "None"
     logger_type = "Full"
 
     data = {

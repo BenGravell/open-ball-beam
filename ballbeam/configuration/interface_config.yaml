@@ -1,4 +1,4 @@
-controller_type: MSPC
+controller_type: LQG
 cost_type: Default
 logger_type: Full
 monitor_types:
