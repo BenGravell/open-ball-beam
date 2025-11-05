@@ -18,9 +18,12 @@ class ConvertedObject:
     """Dummy object for conversion from dict."""
 
 
-def convert_dict_to_object(d: dict[str, Any]) -> ConvertedObject:
+def convert_dict_to_object(d: dict[str, Any] | None) -> ConvertedObject:
     """Convert a (nested) dictionary to an object."""
     out = ConvertedObject()
+    if d is None:
+        return out
+    
     for key, value in d.items():
         attr = convert_dict_to_object(value) if isinstance(value, dict) else value
         setattr(out, key, attr)

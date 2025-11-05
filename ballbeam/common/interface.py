@@ -74,7 +74,7 @@ class Interface:
         self.t = 0
 
         # Create the Qt application
-        self.app = QtWidgets.QApplication(sys.argv)
+        self.app = QtWidgets.QApplication.instance()
         self.app.aboutToQuit.connect(self.stop)
         self.timer = pg.QtCore.QTimer()
         self.timer.timeout.connect(self.update)

@@ -13,7 +13,10 @@ from ballbeam.paths import CONFIGURATION_PATH
 
 def load_config_as_object(filename: str) -> ConvertedObject:
     """Load a configuration from a file as an object."""
-    return convert_dict_to_object(yaml_import(CONFIGURATION_PATH.joinpath(filename)))
+    p = CONFIGURATION_PATH.joinpath(filename)
+    # Create an empty file if it does not exist
+    p.touch(exist_ok=True)
+    return convert_dict_to_object(yaml_import(p))
 
 
 @dataclasses.dataclass
